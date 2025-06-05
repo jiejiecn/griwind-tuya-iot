@@ -31,6 +31,16 @@
 </br>
 </br>
 
+### 项目更新
+#### 2025.06.05
+本项目专门适配格兰斯柯JW-150/250/350双向流新风系统，通过新风面板预留的485接口通信获取新风机工作状态。</br>
+
+Panel: &emsp;  原厂面板资料</br>
+PCB: &emsp;  外挂控制器PCB设计资料</br>
+MCU: &emsp;  外挂控制器代码</br>
+
+
+
 ### 效果展示
 
 外挂控制集成了AHT20温湿度传感器，用于获取室内的环境参数。
@@ -63,13 +73,18 @@ RP2040 Zero集成了WS2812 RGB LED，可以用不同颜色组合表示风速状�
 </br>
 </br>
 
-### 项目更新
-#### 2025.06.05
-本项目专门适配格兰斯柯JW-150/250/350双向流新风系统，通过新风面板预留的485接口通信获取新风机工作状态。</br>
+### 参考资料
+涂鸦WBR1模组： &emsp; https://developer.tuya.com/cn/docs/iot/wbr1-module-datasheet?id=K9duisiao4qpa
 
-ControlPanel: &emsp;  原厂面板资料</br>
-PCB: &emsp;  外挂控制器PCB设计资料</br>
-MCU: &emsp;  外挂控制器代码</br>
-HRV: &emsp;  新风机资料
+涂鸦串口协议： &emsp; https://developer.tuya.com/cn/docs/iot/tuya-cloud-universal-serial-port-access-protocol?id=K9hhi0xxtn9cb#title-0-%E4%B8%B2%E5%8F%A3%E9%80%9A%E4%BF%A1%E7%BA%A6%E5%AE%9A
+
+AHT20模组: &emsp; https://files.seeedstudio.com/wiki/Grove-AHT20_I2C_Industrial_Grade_Temperature_and_Humidity_Sensor/AHT20-datasheet-2020-4-16.pdf
+
+WS2812 RGB：&emsp; https://cdn-shop.adafruit.com/datasheets/WS2812.pdf
+
+
+
+
+
 
 
