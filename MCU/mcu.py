@@ -10,7 +10,9 @@ from machine import ADC, Pin, UART, I2C
 TUYA_PID = "b7zdedszp3gq3k9t" # 涂鸦产品ID
 
 # 硬件初始化
-uart = UART(0, baudrate=115200, tx=Pin(0), rx=Pin(1))  # UART0使用GP0和GP1，涂鸦模块通信端口
+uart = UART(0, baudrate=115200, tx=Pin(0), rx=Pin(1))  # 涂鸦模块通信端口，UART0使用GP0和GP1
+rs485 = UART(1, baudrate=9600, tx=Pin(8), rx=Pin(9))   # 485接口使用UART1，UART1使用GP8和GP9
+
 led = Pin(25, Pin.OUT)  # 模块25脚LED，网络状态LED
 np = neopixel.NeoPixel(machine.Pin(16), 1) # GPIO 16连接WS2812，风速状态LED
 
@@ -27,9 +29,8 @@ STATE_PROVISIONED = 1
 STATE_CLOUD_CONNECTED = 2
 
 # 全局变量
-current_state = STATE_UNPROVISIONED
-
 last_report_time = 0
+last_update_time = 0
 
 led_timer = 0
 led_state = False
@@ -68,12 +69,12 @@ def aht20_read_data():
         return None, None
 
 def update_env_data():
-    global last_temp, last_humidity
+    global last_temp, last_humidity, last_update_time
     
     last_temp, last_humidity = aht20_read_data()
     print("Temp & Humi: ", last_temp, last_humidity)
     
-    
+    last_update_time = time.ticks_ms()
 
 
 #########################################################
@@ -275,7 +276,6 @@ def query_network_status():
     query_frame = build_tuya_frame(0x2B, b'')  # 网络状态查询命令
     uart.write(query_frame)
     
-    last_report_time = time.ticks_ms()
 
 def process_rx_frame(frame):
     """处理接收到的数据帧"""
@@ -424,6 +424,7 @@ def update_led():
         led.value(1)  # 常亮
 
 # 主程序初始化
+current_state = STATE_UNPROVISIONED
 led.value(0)  # 初始关闭LED
 startup_timer = time.ticks_ms()
 # 初始化传感器
@@ -434,6 +435,7 @@ print("等待模块初始化...")
 
 # 主循环
 while True:
+    
     parse_uart_data()  # 处理串口数据
     
     current_time = time.ticks_ms()
@@ -442,11 +444,9 @@ while True:
     if current_time - last_report_time >= UPDATE_INTERVAL and current_state == STATE_CLOUD_CONNECTED:
         send_data_response()
     
-    if current_time - last_report_time >= 5000:
+    if current_time - last_update_time >= 5000:
         update_env_data()
-        
         query_network_status()
-        
         aht20_trigger_measurement()
     
     
