@@ -159,7 +159,8 @@ def send_product_response(PID):
     """发送产品信息"""
     product_info = "{\"p\":\""
     product_info += PID
-    product_info += "\",\"v\":\"1.0.0\",\"m\":0}"
+    product_info += "\",\"v\":\"1.0.0\",\"m\":0,\"low\":1}"
+    #product_info += "\",\"v\":\"1.0.0\",\"m\":0}"
     
     print(product_info)
     
@@ -455,3 +456,4 @@ while True:
     reset_btn()          # 配网按钮状态
     
     time.sleep_ms(50)  
+
